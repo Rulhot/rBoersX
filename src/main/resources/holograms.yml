@@ -1,0 +1,35 @@
+# Нужен FancyHolograms или DecentHolograms
+enabled: true
+height: 0.6
+only-running: false
+
+style: # оформление, работает только с FancyHolograms
+  scale: 1.0 # размер текста, 0.1-20
+  billboard: CENTER # CENTER - всегда лицом к игроку, VERTICAL, HORIZONTAL, FIXED
+  alignment: CENTER # выравнивание строк: CENTER, LEFT, RIGHT
+  background: transparent # default, transparent, #RRGGBB или #AARRGGBB
+  text-shadow: true
+  see-through: false
+  brightness: -1 # яркость 0-15, -1 - как у окружения
+  visibility-distance: -1 # с какого расстояния видно, -1 - как в настройках FancyHolograms
+  shadow-radius: 0.0
+  shadow-strength: 1.0
+
+# В строках работают {name}, {level}, {owner}, {status}, {fuel}, {progress}, {mined}, {stored},
+# {size}, {depth}, {speed}, {x}, {y}, {z}
+lines:
+  running:
+    - "{name} <gray>{level} ур."
+    - "<gray>{owner}"
+    - ""
+    - "{status} <dark_gray>• <white>{progress}%"
+    - "<gray>Топливо <#D9A26B>{fuel}"
+    - "<gray>Склад <#7FC4B8>{stored} шт."
+  stopped:
+    - "{name} <gray>{level} ур."
+    - "<gray>{owner}"
+    - ""
+    - "{status}"
+    - "<gray>Склад <#7FC4B8>{stored} шт."
+
+config-version: 1 #не трогать!!!

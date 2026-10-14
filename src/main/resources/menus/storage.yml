@@ -1,0 +1,33 @@
+title: "<dark_gray>Склад бура"
+size: 54
+
+content-slots: [0-44] # слоты добычи
+
+# actions: [previous], [next], [back], [close]
+buttons:
+  previous:
+    material: PLAYER_HEAD
+    texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ=="
+    slot: 48
+    name: "<white>Назад"
+    lore:
+      - "<gray>Страница {page} из {pages}"
+    actions:
+      - "[previous]"
+  back:
+    material: BRUSH
+    slot: 49
+    name: "<white>Вернуться к буру"
+    actions:
+      - "[back]"
+  next:
+    material: PLAYER_HEAD
+    texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19"
+    slot: 50
+    name: "<white>Вперёд"
+    lore:
+      - "<gray>Страница {page} из {pages}"
+    actions:
+      - "[next]"
+
+config-version: 1 #не трогать!!!

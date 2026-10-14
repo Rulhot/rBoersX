@@ -1,0 +1,88 @@
+title: "<dark_gray>Бур {level} уровня"
+size: 27
+
+formats:
+  zone-center: "<#8FB8DE>вокруг бура"
+  zone-forward: "<#D9A26B>перед буром"
+
+# actions: [toggle], [fuel], [storage], [blocks], [zone], [close]
+# state - другой вид кнопки, пока бур работает (condition: running)
+buttons:
+  fuel:
+    material: BLAST_FURNACE
+    slot: 10
+    name: "<white>Топливо"
+    lore:
+      - ""
+      - " <#D9A26B>▪ <white>Хватит на: <#D9A26B>{fuel}"
+      - ""
+      - " <gray>Нажми, чтобы заправить"
+    actions:
+      - "[fuel]"
+  blocks:
+    material: HOPPER
+    slot: 11
+    name: "<white>Что копать"
+    lore:
+      - ""
+      - " <#8FB8DE>Выбери <white>блоки, которые бур ломает."
+      - ""
+      - " <gray>Нажми, чтобы настроить"
+    actions:
+      - "[blocks]"
+  toggle:
+    material: LIME_DYE
+    slot: 13
+    name: "<white>Запустить бур"
+    lore:
+      - ""
+      - " <#8CC77E><u>▌</u> <white>Состояние: {status}"
+      - " <#8CC77E><u>▌</u> <white>Владелец: <#8CC77E>{owner}"
+      - " <#8CC77E><u>▌</u> <white>Зона: <#8CC77E>{size}x{size}<white>, глубина <#8CC77E>{depth}"
+      - " <#8CC77E><u>▌</u> <white>Скорость: <#8CC77E>{speed} <white>блоков/мин"
+      - " <#8CC77E>▌ <white>Выработано: <#8CC77E>{progress}% <gray>({mined} блоков)"
+      - ""
+      - " <gray>Нажми, чтобы запустить"
+    state:
+      condition: running
+      material: RED_DYE
+      name: "<white>Остановить бур"
+      lore:
+        - ""
+        - " <#D7706C><u>▌</u> <white>Состояние: {status}"
+        - " <#D7706C><u>▌</u> <white>Владелец: <#D7706C>{owner}"
+        - " <#D7706C><u>▌</u> <white>Зона: <#D7706C>{size}x{size}<white>, глубина <#D7706C>{depth}"
+        - " <#D7706C><u>▌</u> <white>Скорость: <#D7706C>{speed} <white>блоков/мин"
+        - " <#D7706C>▌ <white>Выработано: <#D7706C>{progress}% <gray>({mined} блоков)"
+        - ""
+        - " <gray>Нажми, чтобы остановить"
+    actions:
+      - "[toggle]"
+  storage:
+    material: BARREL
+    slot: 15
+    name: "<white>Склад"
+    lore:
+      - ""
+      - " <#7FC4B8>▪ <white>Лежит: <#7FC4B8>{stored} <gray>из {storage_limit}"
+      - ""
+      - " <gray>Нажми, чтобы открыть"
+    actions:
+      - "[storage]"
+  zone:
+    material: COMPASS
+    slot: 16
+    name: "<white>Зона добычи"
+    lore:
+      - ""
+      - " <#8FB8DE>▪ <white>Сейчас: {zone}"
+      - ""
+      - " <gray>Вокруг бура: бур в центре зоны."
+      - " <gray>Перед буром: зона идёт от бура туда,"
+      - " <gray>куда ты смотрел при установке."
+      - ""
+      - " <gray>Нажми, чтобы переключить"
+    actions:
+      - "[zone]"
+
+config-version: 1 #не трогать!!!

@@ -1,0 +1,76 @@
+title: "<dark_gray>Что копать"
+size: 54
+
+content-slots: [0-44]
+
+formats:
+  state-on: "<#8CC77E>копает"
+  state-off: "<#D7706C>пропускает"
+
+content-item:
+  glow-when-enabled: true
+  name: "<white>{item_name}"
+  lore:
+    - ""
+    - " <#8FB8DE>▪ <white>Бур: {state}"
+    - ""
+    - " <gray>Нажми, чтобы переключить"
+
+# actions: [toggle-other], [enable-all], [disable-all], [previous], [next], [back], [close]
+buttons:
+  other:
+    material: ENDER_EYE
+    slot: 45
+    name: "<white>Блоки не из списка"
+    lore:
+      - ""
+      - " <#B7A3E0>▪ <white>Бур: {other_state}"
+      - ""
+      - " <gray>Нажми, чтобы переключить"
+    actions:
+      - "[toggle-other]"
+  enable:
+    material: LIME_DYE
+    slot: 47
+    name: "<white>Копать всё"
+    lore:
+      - ""
+      - " <#8CC77E>▪ <white>Включает все блоки из списка"
+    actions:
+      - "[enable-all]"
+  previous:
+    material: PLAYER_HEAD
+    texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ=="
+    slot: 48
+    name: "<white>Назад"
+    lore:
+      - "<gray>Страница {page} из {pages}"
+    actions:
+      - "[previous]"
+  back:
+    material: BRUSH
+    slot: 49
+    name: "<white>Вернуться к буру"
+    actions:
+      - "[back]"
+  next:
+    material: PLAYER_HEAD
+    texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19"
+    slot: 50
+    name: "<white>Вперёд"
+    lore:
+      - "<gray>Страница {page} из {pages}"
+    actions:
+      - "[next]"
+  disable:
+    material: RED_DYE
+    slot: 51
+    name: "<white>Не копать ничего"
+    lore:
+      - ""
+      - " <#D7706C><u>▌</u> <white>Выключает все блоки из списка."
+      - " <#D7706C>▌ <white>Потом включи нужные."
+    actions:
+      - "[disable-all]"
+
+config-version: 1 #не трогать!!!

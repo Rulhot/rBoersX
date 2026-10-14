@@ -1,0 +1,158 @@
+package ru.rulhot.rBoersX.manager;
+
+import lombok.experimental.UtilityClass;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.rulhot.rBoersX.util.logger.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Set;
+
+@UtilityClass
+public class ConfigFile {
+
+    private final String VERSION_KEY = "config-version";
+    private final String PATH_SEPARATOR = ".";
+    private final String TEMPORARY_SUFFIX = ".tmp";
+    private final String BACKUP_SUFFIX = ".bak";
+
+    public synchronized @NotNull YamlConfiguration read(@NotNull JavaPlugin plugin, @NotNull String path,
+                                                        @NotNull Set<String> livePaths) {
+        File target = new File(plugin.getDataFolder(), path);
+        if (!target.exists()) {
+            plugin.saveResource(path, false);
+        }
+        YamlConfiguration defaults = readDefaults(plugin, path);
+        YamlConfiguration current = new YamlConfiguration();
+        try {
+            current.load(target);
+        } catch (IOException | InvalidConfigurationException exception) {
+            Logger.error("Ошибка в " + path, exception);
+            return defaults != null ? defaults : current;
+        }
+        if (defaults == null) {
+            return current;
+        }
+        boolean outdated = current.getInt(VERSION_KEY, 0) < defaults.getInt(VERSION_KEY, 0);
+        if (!outdated && !hasMissingKeys(current, defaults, livePaths)) {
+            return current;
+        }
+        YamlConfiguration merged = merge(current, defaults, livePaths);
+        Path file = target.toPath();
+        String backupName = file.getFileName() + BACKUP_SUFFIX;
+        try {
+            Files.copy(file, file.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
+            writeAtomically(file, merged.saveToString());
+        } catch (IOException exception) {
+            Logger.error(path + " не сохранён", exception);
+        }
+        return merged;
+    }
+
+    private void writeAtomically(@NotNull Path file, @NotNull String text) throws IOException {
+        Path temporary = file.resolveSibling(file.getFileName() + TEMPORARY_SUFFIX);
+        Files.writeString(temporary, text, StandardCharsets.UTF_8);
+        try {
+            Files.move(temporary, file, StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException exception) {
+            Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    private boolean hasMissingKeys(@NotNull YamlConfiguration current, @NotNull YamlConfiguration defaults,
+                                   @NotNull Set<String> livePaths) {
+        for (String key : defaults.getKeys(true)) {
+            if (!isUnderLivePath(key, livePaths) && !current.contains(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private @NotNull YamlConfiguration merge(@NotNull YamlConfiguration current, @NotNull YamlConfiguration defaults,
+                                             @NotNull Set<String> livePaths) {
+        YamlConfiguration merged = new YamlConfiguration();
+        merged.options().width(Integer.MAX_VALUE);
+        merged.options().setHeader(defaults.options().getHeader());
+        merged.options().setFooter(defaults.options().getFooter());
+        for (String key : defaults.getKeys(true)) {
+            if (key.equals(VERSION_KEY) || isUnderLivePath(key, livePaths)) {
+                continue;
+            }
+            if (livePaths.contains(key)) {
+                copySubtree(current.contains(key) ? current : defaults, merged, key);
+            } else if (defaults.isConfigurationSection(key)) {
+                if (!merged.isConfigurationSection(key)) {
+                    merged.createSection(key);
+                }
+            } else {
+                boolean keepCurrent = current.contains(key) && !current.isConfigurationSection(key);
+                merged.set(key, keepCurrent ? current.get(key) : defaults.get(key));
+            }
+            merged.setComments(key, defaults.getComments(key));
+            merged.setInlineComments(key, defaults.getInlineComments(key));
+        }
+        for (String key : current.getKeys(true)) {
+            if (!key.equals(VERSION_KEY) && !merged.contains(key) && !current.isConfigurationSection(key)) {
+                merged.set(key, current.get(key));
+            }
+        }
+        merged.set(VERSION_KEY, defaults.getInt(VERSION_KEY, 0));
+        merged.setComments(VERSION_KEY, defaults.getComments(VERSION_KEY));
+        merged.setInlineComments(VERSION_KEY, defaults.getInlineComments(VERSION_KEY));
+        return merged;
+    }
+
+    private @Nullable YamlConfiguration readDefaults(@NotNull JavaPlugin plugin, @NotNull String path) {
+        try (InputStream stream = plugin.getResource(path)) {
+            if (stream == null) {
+                return null;
+            }
+            return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
+        } catch (IOException exception) {
+            Logger.error(path + " не прочитан из jar", exception);
+            return null;
+        }
+    }
+
+    private void copySubtree(@NotNull ConfigurationSection source, @NotNull YamlConfiguration target,
+                             @NotNull String path) {
+        ConfigurationSection section = source.getConfigurationSection(path);
+        if (section == null) {
+            target.set(path, source.get(path));
+            return;
+        }
+        target.createSection(path);
+        for (String key : section.getKeys(true)) {
+            String fullKey = path + PATH_SEPARATOR + key;
+            if (section.isConfigurationSection(key)) {
+                target.createSection(fullKey);
+            } else {
+                target.set(fullKey, section.get(key));
+            }
+            target.setComments(fullKey, section.getComments(key));
+            target.setInlineComments(fullKey, section.getInlineComments(key));
+        }
+    }
+
+    private boolean isUnderLivePath(@NotNull String key, @NotNull Set<String> livePaths) {
+        for (String livePath : livePaths) {
+            if (key.startsWith(livePath + PATH_SEPARATOR)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

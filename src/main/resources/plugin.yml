@@ -1,0 +1,12 @@
+name: rBoersX
+version: '1.0'
+main: ru.rulhot.rBoersX.RBoersX
+api-version: '1.21.4'
+folia-supported: true
+authors: [ Rulhot ]
+depend: [ packetevents ]
+softdepend: [ Vault, BVault, CoinsEngine, PlayerPoints, WorldGuard, FancyHolograms, DecentHolograms ]
+
+libraries:
+  - com.j256.ormlite:ormlite-jdbc:6.1
+  - com.zaxxer:HikariCP:6.2.1

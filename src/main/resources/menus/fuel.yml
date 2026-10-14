@@ -1,0 +1,47 @@
+title: "<dark_gray>Топливо бура"
+size: 27
+
+content-slots: [0-17] # слоты топлива
+
+formats:
+  fuel-line: " <gray>▪ <white>{item}: <#D9A26B>{time}"
+  fuel-none: " <gray>заправка предметами отключена"
+
+# actions: [buy-fuel-10], [back], [close]
+# actions - любой клик, left-actions - лкм, right-actions - пкм
+buttons:
+  info:
+    material: CAMPFIRE
+    slot: 21
+    name: "<white>Запас топлива"
+    lore:
+      - ""
+      - " <#D9A26B>▪ <white>Хватит на: <#D9A26B>{fuel}"
+      - ""
+      - " <white>Клади топливо в слоты сверху:"
+      - "{fuel_list}"
+  back:
+    material: BRUSH
+    slot: 22
+    name: "<white>Вернуться к буру"
+    actions:
+      - "[back]"
+  buy:
+    material: AMETHYST_SHARD
+    slot: 23
+    name: "<white>Купить время работы"
+    lore:
+      - ""
+      - " <white>Бур тратит купленное время первым."
+      - ""
+      - " <#B7A3E0><u>▌</u> <white>Цена минуты: <#E6C15A>{fuel_price} ⛃"
+      - " <#B7A3E0>▌ <white>Предел запаса: <#E6C15A>{fuel_max}"
+      - ""
+      - " <gray>Лкм: купить 10 мин"
+      - " <gray>Пкм: купить 60 мин"
+    left-actions:
+      - "[buy-fuel-10]"
+    right-actions:
+      - "[buy-fuel-60]"
+
+config-version: 1 #не трогать!!!

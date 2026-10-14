@@ -1,0 +1,38 @@
+settings:
+  debug: false
+  metrics: true
+  update-check: true
+
+command:
+  main: rboersx
+  aliases: [ boer, bur ]
+
+limits:
+  per-player: 3 # право rboersx.limit.bypass снимает лимит
+  allow-overlap: false
+  pickup: OWNER # OWNER - ломать бур может только владелец, ANYONE - любой игрок
+
+# mode: BLACKLIST - в мирах из списка ставить буры нельзя, WHITELIST - можно только в них
+worlds:
+  mode: BLACKLIST
+  list: []
+
+
+performance:
+  autosave-seconds: 60 # как часто буры сохраняются в базу, минимум 10
+  max-scan-per-cycle: 64 # сколько пустых позиций бур пролистывает за цикл, 1-1024
+  menu-refresh-ticks: 20 # как часто обновляется открытое меню, минимум 5
+  border-view-radius: 48 # с какого расстояния видна рамка бура, 8-128 блоков
+  border-update-ticks: 20 # как часто проверяется, кому показать рамку, минимум 5
+  hologram-update-ticks: 20 # как часто обновляется текст голограмм, минимум 10
+
+sounds:
+  click:
+    key: "minecraft:ui.button.click"
+    volume: 0.5
+    pitch: 1.0
+  break: # звук ломания блока, volume: 0 - без звука
+    volume: 0.6
+    pitch: 1.0
+
+config-version: 1 #не трогать!!!

@@ -1,0 +1,166 @@
+# Рамка зоны: угловые стойки, соединённые тонкими рёбрами снизу и сверху
+border:
+  thickness: 0.06 # толщина рёбер в блоках, 0.02-1.0
+  corner-size: 0.16
+  corner-height: 1.0
+  y-offset: 0.01
+  glow: true # подсветка видна сквозь блоки
+
+
+list:
+  1:
+    level: 1
+    name: "<#C9B99A>Железный бур"
+    block: IRON_BLOCK # блок бура, твёрдый и без гравитации
+    radius: 1 # радиус зоны: 1 = квадрат 3x3 вокруг бура, 0-32
+    depth: 16 # на сколько слоёв вниз копает, 1-512
+    interval-ticks: 40 # пауза между циклами добычи, 20 тиков = 1 секунда, минимум 5
+    blocks-per-cycle: 1 # 1-64
+    storage-limit: 0 # сколько предметов вмещает склад, 0 - без лимита
+    max-fuel-minutes: 120 # предел купленного времени
+    fuel-multiplier: 1.0 # расход топлива: 0.5 - вдвое экономнее, 2.0 - вдвое прожорливее
+    fortune: 0 # 0-10
+    silk-touch: false # шёлковое касание, отключает fortune
+    auto-smelt: false # переплавка добычи по таблице smelt из blocks.yml
+    remove-liquids: true # убирать воду, лаву, огонь и рыхлый снег в зоне добычи
+    border:
+      material: WHITE_CONCRETE
+      glow-color: "#C9B99A" # цвет подсветки рамки
+    item:
+      glow: false
+      model-data: 0
+      name: "{name} <gray>[<#7FC4B8>{level} LvL<gray>]"
+      lore:
+        - ""
+        - " <#C9B99A>Бур <white>сам копает блоки в своей зоне"
+        - " <white>и кладёт добычу на склад."
+        - ""
+        - " <#C9B99A><u>▌</u> <white>Зона добычи: <#C9B99A>{size}x{size}"
+        - " <#C9B99A><u>▌</u> <white>Глубина: <#C9B99A>{depth} слоёв"
+        - " <#C9B99A><u>▌</u> <white>Скорость: <#C9B99A>{speed} блоков/мин"
+        - " <#C9B99A>▌ <white>Купленное время: <#C9B99A>{fuel}"
+        - ""
+        - " <#E6C15A>Особенности:"
+        - " <gray>▪ <white>Зона 3x3 и глубина 16 слоёв"
+        - " <gray>▪ <white>Убирает воду и лаву"
+        - ""
+        - " <white>Поставь блок и нажми пкм."
+        - ""
+  2:
+    level: 2
+    name: "<#E6C15A>Золотой бур"
+    block: GOLD_BLOCK
+    radius: 2
+    depth: 32
+    interval-ticks: 30
+    blocks-per-cycle: 1
+    storage-limit: 0
+    max-fuel-minutes: 240
+    fuel-multiplier: 1.0
+    fortune: 0
+    silk-touch: false
+    auto-smelt: true
+    remove-liquids: true
+    border:
+      material: YELLOW_CONCRETE
+      glow-color: "#E6C15A"
+    item:
+      glow: false
+      model-data: 0
+      name: "{name} <gray>[<#7FC4B8>{level} LvL<gray>]"
+      lore:
+        - ""
+        - " <#E6C15A>Бур <white>сам копает блоки в своей зоне"
+        - " <white>и кладёт добычу на склад."
+        - ""
+        - " <#E6C15A><u>▌</u> <white>Зона добычи: <#E6C15A>{size}x{size}"
+        - " <#E6C15A><u>▌</u> <white>Глубина: <#E6C15A>{depth} слоёв"
+        - " <#E6C15A><u>▌</u> <white>Скорость: <#E6C15A>{speed} блоков/мин"
+        - " <#E6C15A>▌ <white>Купленное время: <#E6C15A>{fuel}"
+        - ""
+        - " <#E6C15A>Особенности:"
+        - " <gray>▪ <white>Переплавляет руду в слитки"
+        - " <gray>▪ <white>Убирает воду и лаву"
+        - ""
+        - " <white>Поставь блок и нажми пкм."
+        - ""
+  3:
+    level: 3
+    name: "<#7FC4B8>Алмазный бур"
+    block: DIAMOND_BLOCK
+    radius: 3
+    depth: 64
+    interval-ticks: 10
+    blocks-per-cycle: 1
+    storage-limit: 0
+    max-fuel-minutes: 480
+    fuel-multiplier: 1.0
+    fortune: 2
+    silk-touch: false
+    auto-smelt: false
+    remove-liquids: true
+    border:
+      material: LIGHT_BLUE_CONCRETE
+      glow-color: "#7FC4B8"
+    item:
+      glow: true
+      model-data: 0
+      name: "{name} <gray>[<#7FC4B8>{level} LvL<gray>]"
+      lore:
+        - ""
+        - " <#7FC4B8>Бур <white>сам копает блоки в своей зоне"
+        - " <white>и кладёт добычу на склад."
+        - ""
+        - " <#7FC4B8><u>▌</u> <white>Зона добычи: <#7FC4B8>{size}x{size}"
+        - " <#7FC4B8><u>▌</u> <white>Глубина: <#7FC4B8>{depth} слоёв"
+        - " <#7FC4B8><u>▌</u> <white>Скорость: <#7FC4B8>{speed} блоков/мин"
+        - " <#7FC4B8>▌ <white>Купленное время: <#7FC4B8>{fuel}"
+        - ""
+        - " <#E6C15A>Особенности:"
+        - " <gray>▪ <white>Удача II"
+        - " <gray>▪ <white>Убирает воду и лаву"
+        - ""
+        - " <white>Поставь блок и нажми пкм."
+        - ""
+  4:
+    level: 4
+    name: "<#B7A3E0>Незеритовый бур"
+    block: NETHERITE_BLOCK
+    radius: 4
+    depth: 128
+    interval-ticks: 5
+    blocks-per-cycle: 11
+    storage-limit: 0
+    max-fuel-minutes: 960
+    fuel-multiplier: 0.5
+    fortune: 3
+    silk-touch: false
+    auto-smelt: true
+    remove-liquids: true
+    border:
+      material: PURPLE_CONCRETE
+      glow-color: "#B7A3E0"
+    item:
+      glow: true
+      model-data: 0
+      name: "{name} <gray>[<#7FC4B8>{level} LvL<gray>]"
+      lore:
+        - ""
+        - " <#B7A3E0>Бур <white>сам копает блоки в своей зоне"
+        - " <white>и кладёт добычу на склад."
+        - ""
+        - " <#B7A3E0><u>▌</u> <white>Зона добычи: <#B7A3E0>{size}x{size}"
+        - " <#B7A3E0><u>▌</u> <white>Глубина: <#B7A3E0>{depth} слоёв"
+        - " <#B7A3E0><u>▌</u> <white>Скорость: <#B7A3E0>{speed} блоков/мин"
+        - " <#B7A3E0>▌ <white>Купленное время: <#B7A3E0>{fuel}"
+        - ""
+        - " <#E6C15A>Особенности:"
+        - " <gray>▪ <white>Удача III"
+        - " <gray>▪ <white>Переплавляет руду в слитки"
+        - " <gray>▪ <white>Тратит вдвое меньше топлива"
+        - " <gray>▪ <white>Убирает воду и лаву"
+        - ""
+        - " <white>Поставь блок и нажми пкм."
+        - ""
+
+config-version: 1 #не трогать!!!
