@@ -33,7 +33,7 @@ public record MenuConfig(
     public static @NotNull MenuConfig parse(@NotNull String file, @NotNull ConfigurationSection root) {
         int size = root.getInt("size", MAX_SIZE);
         if (size % ROW_SIZE != 0 || size < ROW_SIZE || size > MAX_SIZE) {
-            Logger.warn(file + ": size не кратен 9, взято " + MAX_SIZE);
+            Logger.warn(file + ": неверный size " + root.getInt("size") + ", ставлю " + MAX_SIZE);
             size = MAX_SIZE;
         }
         Set<Integer> contentSlots = parseSlots(root.getList("content-slots", List.of()), size,
@@ -67,8 +67,8 @@ public record MenuConfig(
                 formats(root.getConfigurationSection("formats")));
     }
 
-    public @NotNull String format(@NotNull String key, @NotNull String fallback) {
-        return formats.getOrDefault(key, fallback);
+    public @NotNull String format(@NotNull String key) {
+        return formats.getOrDefault(key, "");
     }
 
     private static @NotNull Map<String, String> formats(@Nullable ConfigurationSection section) {
@@ -93,7 +93,7 @@ public record MenuConfig(
             condition = Condition.valueOf(section.getString("condition", "").trim().toUpperCase(Locale.ROOT)
                     .replace('-', '_'));
         } catch (IllegalArgumentException exception) {
-            Logger.warn(context + ": неверный condition");
+            Logger.warn(context + ": неизвестный condition '" + section.getString("condition") + "', пропускаю");
             return null;
         }
         ItemTemplate icon = ItemTemplate.parse(section, context);
@@ -104,7 +104,7 @@ public record MenuConfig(
         if (used.add(slot)) {
             return true;
         }
-        Logger.warn(context + ": слот " + slot + " занят");
+        Logger.warn(context + ": слот " + slot + " уже занят, пропускаю");
         return false;
     }
 
@@ -116,12 +116,12 @@ public record MenuConfig(
                 Matcher matcher = ACTION.matcher(raw.trim().toLowerCase(Locale.ROOT));
                 Action action = matcher.matches() ? Action.find(matcher.group(1)) : null;
                 if (action == null) {
-                    Logger.warn(context + ": нет действия " + raw);
+                    Logger.warn(context + ": неизвестное действие '" + raw + "', пропускаю");
                     continue;
                 }
                 String value = matcher.group(2);
                 if (action == Action.BUY_FUEL && value == null) {
-                    Logger.warn(context + ": у " + raw + " нет минут, пиши [buy-fuel-10]");
+                    Logger.warn(context + ": у " + raw + " нет минут, пропускаю. Пиши [buy-fuel-10]");
                     continue;
                 }
                 clicks.add(new Click(side, action, value == null ? 0 : Integer.parseInt(value)));
@@ -149,13 +149,13 @@ public record MenuConfig(
                 int from = Math.min(first, second);
                 int to = Math.max(first, second);
                 if (from < 0 || to >= size) {
-                    Logger.warn(context + ": слоты " + from + "-" + to + " больше " + (size - 1));
+                    Logger.warn(context + ": слоты " + from + "-" + to + " за пределами меню 0-" + (size - 1) + ", лишние пропускаю");
                 }
                 for (int slot = Math.max(0, from); slot <= Math.min(to, size - 1); slot++) {
                     result.add(slot);
                 }
             } catch (NumberFormatException exception) {
-                Logger.warn(context + ": неверный слот " + text);
+                Logger.warn(context + ": неверный слот '" + text + "', пропускаю");
             }
         }
         return result;

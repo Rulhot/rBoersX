@@ -37,7 +37,7 @@ public final class ReloadService {
                 bundle = config.readAll();
             } catch (RuntimeException exception) {
                 reloading.set(false);
-                Logger.error("Конфиг не прочитан", exception);
+                Logger.error("Не удалось прочитать конфиги, оставляю прежние", exception);
                 config.send(sender, "reload.failed");
                 return;
             }
@@ -46,7 +46,7 @@ public final class ReloadService {
                     apply(bundle);
                     config.send(sender, "reload.done");
                 } catch (RuntimeException exception) {
-                    Logger.error("Конфиг не применён", exception);
+                    Logger.error("Не удалось применить конфиги", exception);
                     config.send(sender, "reload.failed");
                 } finally {
                     reloading.set(false);

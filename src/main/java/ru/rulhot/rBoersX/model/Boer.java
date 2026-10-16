@@ -70,7 +70,7 @@ public final class Boer {
         String owner = record.getOwner();
         String type = record.getType();
         if (world == null || owner == null || type == null) {
-            Logger.warn("Бур id=" + record.getId() + " повреждён в базе");
+            Logger.warn("Бур id=" + record.getId() + " повреждён в базе, пропускаю");
             return null;
         }
         Boer boer;
@@ -79,7 +79,7 @@ public final class Boer {
                     UUID.fromString(owner), record.getOwnerName() == null ? "" : record.getOwnerName(),
                     parseFacing(record.getFacing()), record.getFuelMillis());
         } catch (IllegalArgumentException exception) {
-            Logger.warn("Бур id=" + record.getId() + ": неверный UUID");
+            Logger.warn("Бур id=" + record.getId() + ": неверный UUID в базе, пропускаю");
             return null;
         }
         boer.id = record.getId();
@@ -514,6 +514,11 @@ public final class Boer {
 
         public long chunkKey() {
             return Chunk.getChunkKey(chunkX(), chunkZ());
+        }
+
+        @Override
+        public @NotNull String toString() {
+            return x + " " + y + " " + z;
         }
     }
 }

@@ -1,5 +1,5 @@
 name: rBoersX
-version: '1.0'
+version: '1.1'
 main: ru.rulhot.rBoersX.RBoersX
 api-version: '1.21.4'
 folia-supported: true

@@ -39,7 +39,7 @@ public class ConfigFile {
         try {
             current.load(target);
         } catch (IOException | InvalidConfigurationException exception) {
-            Logger.error("Ошибка в " + path, exception);
+            Logger.error("Ошибка в " + path + ", беру значения по умолчанию. Исправь и перезагрузи конфиг", exception);
             return defaults != null ? defaults : current;
         }
         if (defaults == null) {
@@ -56,7 +56,7 @@ public class ConfigFile {
             Files.copy(file, file.resolveSibling(backupName), StandardCopyOption.REPLACE_EXISTING);
             writeAtomically(file, merged.saveToString());
         } catch (IOException exception) {
-            Logger.error(path + " не сохранён", exception);
+            Logger.error("Не удалось сохранить " + path, exception);
         }
         return merged;
     }
@@ -122,7 +122,7 @@ public class ConfigFile {
             }
             return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
         } catch (IOException exception) {
-            Logger.error(path + " не прочитан из jar", exception);
+            Logger.error("Не удалось прочитать " + path + " из jar", exception);
             return null;
         }
     }

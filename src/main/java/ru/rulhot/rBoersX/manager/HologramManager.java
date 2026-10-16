@@ -144,7 +144,7 @@ public final class HologramManager {
 
     private void disable(@NotNull Throwable throwable) {
         broken = true;
-        Logger.error("Голограммы отключены из-за ошибки", throwable);
+        Logger.error("Голограммы сломались, отключаю их до перезапуска", throwable);
     }
 
     private static @NotNull String name(@NotNull Boer boer) {

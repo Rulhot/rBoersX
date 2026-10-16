@@ -6,7 +6,6 @@ formats:
   zone-forward: "<#D9A26B>перед буром"
 
 # actions: [toggle], [fuel], [storage], [blocks], [zone], [close]
-# state - другой вид кнопки, пока бур работает (condition: running)
 buttons:
   fuel:
     material: BLAST_FURNACE
@@ -43,6 +42,7 @@ buttons:
       - " <#8CC77E>▌ <white>Выработано: <#8CC77E>{progress}% <gray>({mined} блоков)"
       - ""
       - " <gray>Нажми, чтобы запустить"
+    # вид кнопки, пока бур работает
     state:
       condition: running
       material: RED_DYE
@@ -85,4 +85,4 @@ buttons:
     actions:
       - "[zone]"
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

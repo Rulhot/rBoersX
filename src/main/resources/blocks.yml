@@ -1,6 +1,7 @@
 skip-blocks: [ BUDDING_AMETHYST, REINFORCED_DEEPSLATE, END_PORTAL_FRAME ] # эти блоки бур никогда не ломает
 
-smelt: # во что превращается добыча у буров с auto-smelt: true
+# во что переплавляется добыча у буров с auto-smelt: true
+smelt:
   RAW_IRON: IRON_INGOT
   RAW_GOLD: GOLD_INGOT
   RAW_COPPER: COPPER_INGOT
@@ -8,7 +9,7 @@ smelt: # во что превращается добыча у буров с auto
   COBBLESTONE: STONE
   COBBLED_DEEPSLATE: DEEPSLATE
 
-# Блоки в меню "Что копать", в этом же порядке
+# блоки в меню "Что копать", в этом же порядке
 list:
   - STONE
   - COBBLESTONE
@@ -70,4 +71,4 @@ list:
   - GLOWSTONE
   - END_STONE
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

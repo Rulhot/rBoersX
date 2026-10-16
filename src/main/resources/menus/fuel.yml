@@ -7,8 +7,7 @@ formats:
   fuel-line: " <gray>▪ <white>{item}: <#D9A26B>{time}"
   fuel-none: " <gray>заправка предметами отключена"
 
-# actions: [buy-fuel-10], [back], [close]
-# actions - любой клик, left-actions - лкм, right-actions - пкм
+# actions: [buy-fuel-10], [back], [close]. actions на любой клик, left-actions на лкм, right-actions на пкм
 buttons:
   info:
     material: CAMPFIRE
@@ -44,4 +43,4 @@ buttons:
     right-actions:
       - "[buy-fuel-60]"
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

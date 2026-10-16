@@ -11,6 +11,4 @@ public interface ILogger {
     void error(@NotNull String message);
 
     void error(@NotNull String message, @NotNull Throwable throwable);
-
-    void debug(@NotNull String message);
 }

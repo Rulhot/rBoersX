@@ -9,14 +9,9 @@ import ru.rulhot.rBoersX.util.logger.impl.LegacyLogger;
 public class Logger {
 
     private volatile ILogger delegate;
-    private volatile boolean debugEnabled;
 
     public void setup(@NotNull JavaPlugin plugin) {
         delegate = new LegacyLogger(plugin.getComponentLogger());
-    }
-
-    public void setDebugEnabled(boolean enabled) {
-        debugEnabled = enabled;
     }
 
     public void info(@NotNull String message) {
@@ -33,11 +28,5 @@ public class Logger {
 
     public void error(@NotNull String message, @NotNull Throwable throwable) {
         delegate.error(message, throwable);
-    }
-
-    public void debug(@NotNull String message) {
-        if (debugEnabled) {
-            delegate.debug(message);
-        }
     }
 }

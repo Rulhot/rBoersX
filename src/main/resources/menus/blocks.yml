@@ -73,4 +73,4 @@ buttons:
     actions:
       - "[disable-all]"
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

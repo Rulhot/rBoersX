@@ -1,93 +1,93 @@
 prefix: "<b><gradient:#A3F082:#C6F7B0><shadow:#2B3F22:1>rBoersX</shadow></gradient></b> <dark_gray>»</dark_gray>"
 
 no-permission: "{prefix} <white>У тебя нет прав на это."
-player-not-found: "{prefix} <white>Игрок <#A3F082>{player}</#A3F082> <red>не найден</red>."
-unknown: "{prefix} <white>Такой команды нет. Список команд: <white>/{command} help."
+player-not-found: "{prefix} <white>Игрок <#A3F082>{player}</#A3F082> не найден."
+unknown: "{prefix} <white>Такой команды нет. Список команд: <#A3F082>/{command} help."
 data-not-loaded: "{prefix} <white>Данные ещё загружаются. Подожди несколько секунд. Если ошибка повторится, напиши администрации."
 
 help:
   - "{prefix} <white>Команды:"
   - " <white>/{command} give [игрок] [бур] [кол-во] <dark_gray>»</dark_gray> <white>выдать бур"
-  - " <white>/{command} admins list [игрок] <dark_gray>»</dark_gray> <white>буры игрока"
-  - " <white>/{command} admins remove [игрок] [номер] <dark_gray>»</dark_gray> <white>снять бур, номер из list"
-  - " <white>/{command} admins fuel [игрок] [минуты] <dark_gray>»</dark_gray> <white>добавить время всем бурам игрока"
-  - " <white>/{command} admins stop [игрок|all] <dark_gray>»</dark_gray> <white>остановить буры"
+  - " <white>/{command} admin list [игрок] <dark_gray>»</dark_gray> <white>буры игрока"
+  - " <white>/{command} admin remove [игрок] [номер] <dark_gray>»</dark_gray> <white>снять бур, номер из list"
+  - " <white>/{command} admin fuel [игрок] [минуты] <dark_gray>»</dark_gray> <white>добавить время всем бурам игрока"
+  - " <white>/{command} admin stop [игрок|all] <dark_gray>»</dark_gray> <white>остановить буры"
   - " <white>/{command} reload <dark_gray>»</dark_gray> <white>перезагрузить конфигурацию"
   - " <white>/{command} help <dark_gray>»</dark_gray> <white>показать эту справку"
 
-invalid-number: "{prefix} <white>Число <#A3F082>{value}</#A3F082> <red>не подходит</red>. Введи целое число от 1 до {max}."
+invalid-number: "{prefix} <white>Число <#A3F082>{value}</#A3F082> не подходит. Введи целое число от 1 до {max}."
 
 give:
   usage:
-    - "{prefix} <white>Формат команды: <white>/{command} give [игрок] [бур] [кол-во]"
+    - "{prefix} <white>Формат команды: <#A3F082>/{command} give [игрок] [бур] [кол-во]"
     - " <white>Номера буров из items.yml: <#A3F082>1<white>, <#A3F082>2<white>, <#A3F082>3<white>, <#A3F082>4"
-  sender: "{prefix} <white>Игрок <#A3F082>{player}</#A3F082> <green>получил</green>: {name} <gray>x{amount}"
-  target: "{prefix} <white>Ты <green>получил</green>: {name} <gray>x{amount}"
-  unknown-type: "{prefix} <white>Бура <#A3F082>{id}</#A3F082> <red>нет</red> в items.yml."
+  sender: "{prefix} <white>Игрок <#A3F082>{player}</#A3F082> получил: {name} <gray>x{amount}"
+  target: "{prefix} <white>Ты получил: {name} <gray>x{amount}"
+  unknown-type: "{prefix} <white>Бура <#A3F082>{id}</#A3F082> нет в items.yml."
 
 reload:
-  usage: "{prefix} <white>Формат команды: <white>/{command} reload"
-  done: "{prefix} <white>Конфигурация <green>перезагружена</green>."
+  usage: "{prefix} <white>Формат команды: <#A3F082>/{command} reload"
+  done: "{prefix} <white>Конфигурация перезагружена."
   busy: "{prefix} <white>Перезагрузка уже идёт. Подожди."
-  failed: "{prefix} <white>Конфигурация <red>не перезагружена</red>, работает прежняя. Ошибка записана в консоль."
+  failed: "{prefix} <white>Конфигурация не перезагружена, работает прежняя. Ошибка записана в консоль."
 
 admin:
-  usage: "{prefix} <white>Формат команды: <white>/{command} admins [list|remove|fuel|stop]"
+  usage: "{prefix} <white>Формат команды: <#A3F082>/{command} admin [list|remove|fuel|stop]"
   list:
-    usage: "{prefix} <white>Формат команды: <white>/{command} admins list [игрок]"
+    usage: "{prefix} <white>Формат команды: <#A3F082>/{command} admin list [игрок]"
     empty: "{prefix} <white>У игрока <#A3F082>{player}</#A3F082> нет буров."
     header: "{prefix} <white>Буры игрока <#A3F082>{player}</#A3F082>: {count}"
     line: " <gray>{number}. <white>{name} <gray>{world} <#A3F082>{x} {y} {z} <dark_gray>» {status}"
     hover: "<white>Нажми, чтобы телепортироваться"
   remove:
-    usage: "{prefix} <white>Формат команды: <white>/{command} admins remove [игрок] [номер]. Номер смотри в /{command} admins list"
-    world-unloaded: "{prefix} <white>Мир этого бура <red>не загружен</red>."
-    done: "{prefix} <white>Бур игрока <#A3F082>{owner}</#A3F082> <red>снят</red>. Склад и топливо лежат рядом."
+    usage: "{prefix} <white>Формат команды: <#A3F082>/{command} admin remove [игрок] [номер]. Номер смотри в /{command} admin list"
+    world-unloaded: "{prefix} <white>Мир этого бура не загружен."
+    done: "{prefix} <white>Бур игрока <#A3F082>{owner}</#A3F082> снят. Склад и топливо лежат рядом."
   fuel:
-    usage: "{prefix} <white>Формат команды: <white>/{command} admins fuel [игрок] [минуты]"
+    usage: "{prefix} <white>Формат команды: <#A3F082>/{command} admin fuel [игрок] [минуты]"
     done: "{prefix} <white>Буры игрока <#A3F082>{player}</#A3F082> получили <#A3F082>{time}</#A3F082> работы. Буров: {count}"
   stop:
-    usage: "{prefix} <white>Формат команды: <white>/{command} admins stop [игрок|all]"
-    player: "{prefix} <white>Буры игрока <#A3F082>{player}</#A3F082> <red>остановлены</red>: {count}"
-    all: "{prefix} <white>Все буры сервера <red>остановлены</red>: {count}"
+    usage: "{prefix} <white>Формат команды: <#A3F082>/{command} admin stop [игрок|all]"
+    player: "{prefix} <white>Буры игрока <#A3F082>{player}</#A3F082> остановлены: {count}"
+    all: "{prefix} <white>Все буры сервера остановлены: {count}"
 
 boer:
-  placed: "{prefix} <white>{name} <green>установлен</green>. Рамка показывает зону <#A3F082>{size}x{size}</#A3F082>. Нажми пкм по буру, чтобы открыть меню."
-  removed: "{prefix} <white>Бур <red>убран</red>."
-  not-owner: "{prefix} <white>Это бур игрока <#A3F082>{owner}</#A3F082>. Им управляет <red>только</red> владелец."
+  placed: "{prefix} <white>{name} установлен. Рамка показывает зону <#A3F082>{size}x{size}</#A3F082>. Нажми пкм по буру, чтобы открыть меню."
+  removed: "{prefix} <white>Бур убран."
+  not-owner: "{prefix} <white>Это бур игрока <#A3F082>{owner}</#A3F082>. Им управляет только владелец."
   storage-not-empty: "{prefix} <white>Сначала забери предметы со склада бура."
   limit: "{prefix} <white>Ты уже поставил максимум буров: <#A3F082>{limit}</#A3F082>. Убери один, чтобы поставить новый."
-  overlap: "{prefix} <white>Здесь бур поставить <red>нельзя</red>. Его зона пересекается с зоной другого бура."
-  region-denied: "{prefix} <white>Здесь бур поставить <red>нельзя</red>. Его зона задевает чужой приват."
+  overlap: "{prefix} <white>Здесь бур поставить нельзя. Его зона пересекается с зоной другого бура."
+  region-denied: "{prefix} <white>Здесь бур поставить нельзя. Его зона задевает чужой приват."
   zone-center: "{prefix} <white>Зона добычи теперь <#A3F082>вокруг бура</#A3F082>. Бур пройдёт зону заново."
   zone-forward: "{prefix} <white>Зона добычи теперь <#A3F082>перед буром</#A3F082>. Бур пройдёт зону заново."
-  world-denied: "{prefix} <white>В этом мире ставить буры <red>нельзя</red>."
-  unknown-type: "{prefix} <white>Администрация <red>отключила</red> этот бур."
-  toggle-on: "{prefix} <white>Бур <green>запущен</green>. Он работает, даже когда ты далеко."
-  toggle-off: "{prefix} <white>Бур <red>остановлен</red>."
-  resumed: "{prefix} <white>Бур снова <green>работает</green>."
-  start-no-fuel: "{prefix} <white>У бура <red>нет</red> топлива. Открой меню топлива и положи топливо в слоты."
-  start-storage-full: "{prefix} <white>Склад бура <red>заполнен</red>. Забери часть предметов, и бур продолжит сам."
+  world-denied: "{prefix} <white>В этом мире ставить буры нельзя."
+  unknown-type: "{prefix} <white>Администрация отключила этот бур."
+  toggle-on: "{prefix} <white>Бур запущен. Он работает, даже когда ты далеко."
+  toggle-off: "{prefix} <white>Бур остановлен."
+  resumed: "{prefix} <white>Бур снова работает."
+  start-no-fuel: "{prefix} <white>У бура нет топлива. Открой меню топлива и положи топливо в слоты."
+  start-storage-full: "{prefix} <white>Склад бура заполнен. Забери часть предметов, и бур продолжит сам."
   start-finished: "{prefix} <white>Бур выработал всю зону. Переставь его в другое место."
 
 notify:
-  no-fuel: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> <red>выключился</red>. Закончилось топливо. Заправь его, и он продолжит сам."
-  storage-full: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> <red>остановился</red>. Склад заполнен. Забери предметы, и он продолжит сам."
-  finished: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> выработал всю зону и <red>выключился</red>."
-  region: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> <red>остановился</red>. Дальше чужой регион. Переключи зону или переставь бур."
+  no-fuel: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> выключился. Закончилось топливо. Заправь его, и он продолжит сам."
+  storage-full: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> остановился. Склад заполнен. Забери предметы, и он продолжит сам."
+  finished: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> выработал всю зону и выключился."
+  region: "{prefix} <white>Бур на <#A3F082>{x} {y} {z}</#A3F082> остановился. Дальше чужой регион. Переключи зону или переставь бур."
 
 fuel:
-  not-fuel: "{prefix} <white>Этот предмет <red>не подходит</red> как топливо. Список топлива есть в меню топлива."
-  full: "{prefix} <white>В слотах топлива <red>нет</red> места."
+  not-fuel: "{prefix} <white>Этот предмет не подходит как топливо. Список топлива есть в меню топлива."
+  full: "{prefix} <white>В слотах топлива нет места."
   bought: "{prefix} <white>Ты купил <#A3F082>{time}</#A3F082> работы за <#E6C15A>{price} ⛃</#E6C15A>. Топлива хватит на <#A3F082>{fuel}</#A3F082>."
-  bought-full: "{prefix} <white>Купленного времени уже <red>максимум</red>. Докупить больше нельзя."
-  not-enough-money: "{prefix} <white>Тебе <red>не хватает</red> монет. Нужно <#E6C15A>{price} ⛃</#E6C15A>."
-  money-unavailable: "{prefix} <white>Покупка времени за монеты сейчас <red>отключена</red>. Заправь бур предметами."
-  economy-error: "{prefix} <white>Монеты <red>не списаны</red>, время не добавлено. Напиши администрации."
+  bought-full: "{prefix} <white>Купленного времени уже максимум. Докупить больше нельзя."
+  not-enough-money: "{prefix} <white>Тебе не хватает монет. Нужно <#E6C15A>{price} ⛃</#E6C15A>."
+  money-unavailable: "{prefix} <white>Покупка времени за монеты сейчас отключена. Заправь бур предметами."
+  economy-error: "{prefix} <white>Монеты не списаны, время не добавлено. Напиши администрации."
 
 storage:
   unlimited: "<gray>без лимита"
-  inventory-full: "{prefix} <white>В твоём инвентаре <red>нет</red> места. Освободи слоты и повтори."
+  inventory-full: "{prefix} <white>В твоём инвентаре нет места. Освободи слоты и повтори."
 
 status:
   stopped: "<#D7706C>выключен"
@@ -103,4 +103,4 @@ time:
   minutes-seconds: "{minutes} мин. {seconds} с."
   seconds: "{seconds} с."
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

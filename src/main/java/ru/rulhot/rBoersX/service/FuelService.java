@@ -1,6 +1,7 @@
 package ru.rulhot.rBoersX.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -13,7 +14,13 @@ import ru.rulhot.rBoersX.manager.ConfigManager;
 import ru.rulhot.rBoersX.model.Boer;
 import ru.rulhot.rBoersX.model.BoerType;
 import ru.rulhot.rBoersX.model.Settings;
+import ru.rulhot.rBoersX.util.SchedulerUtil;
 import ru.rulhot.rBoersX.util.logger.Logger;
+
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 public final class FuelService {
@@ -22,7 +29,9 @@ public final class FuelService {
     private static final double MONEY_SCALE = 100.0D;
 
     private final @NotNull Server server;
+    private final @NotNull SchedulerUtil scheduler;
     private final @NotNull ConfigManager config;
+    private final @NotNull Set<UUID> buying = ConcurrentHashMap.newKeySet();
     private volatile @Nullable EconomyProvider economy;
 
     public void reload() {
@@ -78,26 +87,48 @@ public final class FuelService {
         return false;
     }
 
-    public @NotNull Result buy(@NotNull Player player, @NotNull Boer boer, @NotNull BoerType type,
-                               int requestedMinutes) {
+    public void buy(@NotNull Player player, @NotNull Boer boer, @NotNull BoerType type, int requestedMinutes,
+                    @NotNull Consumer<Result> callback) {
         Settings.Money money = config.settings().fuel().money();
         EconomyProvider provider = money.enabled() ? provider() : null;
         if (provider == null) {
-            return new Result.Unavailable();
+            callback.accept(new Result.Unavailable());
+            return;
         }
         long minutes = Math.min(requestedMinutes, (type.maxFuelMillis() - boer.fuelMillis()) / MILLIS_PER_MINUTE);
         if (minutes <= 0L) {
-            return new Result.Full();
+            callback.accept(new Result.Full());
+            return;
+        }
+        UUID buyer = player.getUniqueId();
+        if (!buying.add(buyer)) {
+            return;
         }
         double price = provider.normalize(Math.round(minutes * money.pricePerMinute() * MONEY_SCALE) / MONEY_SCALE);
+        long millis = minutes * MILLIS_PER_MINUTE;
+        scheduler.runAsync(() -> {
+            Result result;
+            try {
+                result = charge(provider, player, boer, price, millis);
+            } finally {
+                buying.remove(buyer);
+            }
+            Player online = Bukkit.getPlayer(buyer);
+            if (online != null) {
+                scheduler.runFor(online, () -> callback.accept(result));
+            }
+        });
+    }
+
+    private @NotNull Result charge(@NotNull EconomyProvider provider, @NotNull Player player, @NotNull Boer boer,
+                                   double price, long millis) {
         if (price > 0.0D && !provider.has(player, price)) {
             return new Result.NotEnoughMoney(price);
         }
         if (price > 0.0D && !provider.withdraw(player, price)) {
-            Logger.warn(provider.name() + " не списала " + price + " у " + player.getName());
+            Logger.warn(provider.name() + " не списала " + price + " у " + player.getName() + ", топливо не выдано");
             return new Result.EconomyFailed();
         }
-        long millis = minutes * MILLIS_PER_MINUTE;
         boer.addFuel(millis);
         return new Result.Bought(millis, price);
     }

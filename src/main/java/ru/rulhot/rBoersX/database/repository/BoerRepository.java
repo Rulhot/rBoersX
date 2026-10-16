@@ -54,9 +54,11 @@ public final class BoerRepository {
                     }
                 }
                 dao = created;
+                Logger.info("Подключена база " + name(settings.type()) + ", буров: " + boers.size());
                 onLoaded.accept(boers);
             } catch (SQLException exception) {
-                Logger.error("База данных недоступна", exception);
+                Logger.error("Не удалось подключить базу " + name(settings.type())
+                        + ", буры не загружены. Проверь database.yml", exception);
             }
         });
     }
@@ -71,7 +73,7 @@ public final class BoerRepository {
                 current.create(record);
                 boer.assignId(record.getId());
             } catch (SQLException exception) {
-                Logger.error("Бур " + boer.pos() + " не сохранён", exception);
+                Logger.error("Не удалось сохранить бур на " + boer.pos(), exception);
             }
         });
     }
@@ -86,7 +88,7 @@ public final class BoerRepository {
             try {
                 current.deleteById(id);
             } catch (SQLException exception) {
-                Logger.error("Бур id=" + id + " не удалён из базы", exception);
+                Logger.error("Не удалось удалить бур id=" + id + " из базы", exception);
             }
         });
     }
@@ -105,7 +107,7 @@ public final class BoerRepository {
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException | TimeoutException exception) {
-            Logger.error("Буры не сохранены при выключении", exception);
+            Logger.error("Не удалось сохранить буры при выключении", exception);
         }
         executor.shutdown();
         try {
@@ -117,6 +119,13 @@ public final class BoerRepository {
             Thread.currentThread().interrupt();
         }
         databaseManager.close();
+    }
+
+    private static @NotNull String name(@NotNull DatabaseSettings.Type type) {
+        return switch (type) {
+            case SQLITE -> "SQLite";
+            case MYSQL -> "MySQL";
+        };
     }
 
     private void write(@NotNull List<BoerRecord> records) {
@@ -132,7 +141,7 @@ public final class BoerRepository {
                 return null;
             });
         } catch (SQLException exception) {
-            Logger.error("Буры не сохранены (" + records.size() + ")", exception);
+            Logger.error("Не удалось сохранить буры: " + records.size(), exception);
         }
     }
 }

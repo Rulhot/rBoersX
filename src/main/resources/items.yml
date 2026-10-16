@@ -1,31 +1,29 @@
-# Рамка зоны: угловые стойки, соединённые тонкими рёбрами снизу и сверху
 border:
-  thickness: 0.06 # толщина рёбер в блоках, 0.02-1.0
+  thickness: 0.06
   corner-size: 0.16
   corner-height: 1.0
   y-offset: 0.01
-  glow: true # подсветка видна сквозь блоки
-
+  glow: true
 
 list:
   1:
     level: 1
     name: "<#C9B99A>Железный бур"
-    block: IRON_BLOCK # блок бура, твёрдый и без гравитации
-    radius: 1 # радиус зоны: 1 = квадрат 3x3 вокруг бура, 0-32
-    depth: 16 # на сколько слоёв вниз копает, 1-512
-    interval-ticks: 40 # пауза между циклами добычи, 20 тиков = 1 секунда, минимум 5
-    blocks-per-cycle: 1 # 1-64
-    storage-limit: 0 # сколько предметов вмещает склад, 0 - без лимита
-    max-fuel-minutes: 120 # предел купленного времени
-    fuel-multiplier: 1.0 # расход топлива: 0.5 - вдвое экономнее, 2.0 - вдвое прожорливее
-    fortune: 0 # 0-10
-    silk-touch: false # шёлковое касание, отключает fortune
-    auto-smelt: false # переплавка добычи по таблице smelt из blocks.yml
-    remove-liquids: true # убирать воду, лаву, огонь и рыхлый снег в зоне добычи
+    block: IRON_BLOCK
+    radius: 1 # 1 = зона 3x3 вокруг бура, 0-32
+    depth: 16 # сколько слоёв вниз копает, 1-512
+    interval-ticks: 40 # пауза между циклами, 20 тиков = 1 секунда
+    blocks-per-cycle: 1
+    storage-limit: 0 # 0 без лимита
+    max-fuel-minutes: 120
+    fuel-multiplier: 1.0 # 0.5 вдвое экономнее, 2.0 вдвое прожорливее
+    fortune: 0
+    silk-touch: false # отключает fortune
+    auto-smelt: false # переплавка по smelt из blocks.yml
+    remove-liquids: true # убирать воду, лаву, огонь и рыхлый снег в зоне
     border:
       material: WHITE_CONCRETE
-      glow-color: "#C9B99A" # цвет подсветки рамки
+      glow-color: "#C9B99A"
     item:
       glow: false
       model-data: 0
@@ -163,4 +161,4 @@ list:
         - " <white>Поставь блок и нажми пкм."
         - ""
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

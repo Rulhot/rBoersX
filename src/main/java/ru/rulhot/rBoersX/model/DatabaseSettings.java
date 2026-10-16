@@ -9,7 +9,7 @@ public record DatabaseSettings(
 ) {
 
     public static @NotNull DatabaseSettings from(@NotNull ConfigurationSection root) {
-        ConfigurationSection mysql = Settings.section(root, "mysql");
+        ConfigurationSection mysql = Settings.section(root, "mysql", "database.yml");
         return new DatabaseSettings(
                 Settings.enumOr(Type.class, root.getString("storage"), Type.SQLITE, "database.yml storage"),
                 new MySql(

@@ -27,8 +27,6 @@ public record BoerType(
         long storageLimit,
         long maxFuelMillis,
         double fuelMultiplier,
-        int fortune,
-        boolean silkTouch,
         boolean autoSmelt,
         boolean removeLiquids,
         @NotNull BlockData borderBlock,
@@ -59,7 +57,7 @@ public record BoerType(
             return null;
         }
         if (!block.isBlock() || !block.isItem() || !block.isSolid() || block.hasGravity()) {
-            Logger.warn(context + ".block: " + block + " не подходит");
+            Logger.warn(context + ".block: " + block + " не подходит для бура, пропускаю");
             return null;
         }
         boolean silkTouch = section.getBoolean("silk-touch", false);
@@ -82,13 +80,11 @@ public record BoerType(
                 Math.clamp(section.getLong("max-fuel-minutes", 120L), 1L, MAX_FUEL_MINUTES) * MILLIS_PER_MINUTE,
                 Math.clamp(Settings.decimal(section, "fuel-multiplier", 1.0D, context),
                         MIN_FUEL_MULTIPLIER, MAX_FUEL_MULTIPLIER),
-                fortune,
-                silkTouch,
                 section.getBoolean("auto-smelt", false),
                 section.getBoolean("remove-liquids", true),
                 borderBlock(section.getString("border.material"), context),
                 color(section.getString("border.glow-color"), context),
-                ItemTemplate.of(new ItemStack(block), Settings.section(section, "item"), context + ".item"),
+                ItemTemplate.of(new ItemStack(block), Settings.section(section, "item", context), context + ".item"),
                 tool);
     }
 
@@ -136,7 +132,7 @@ public record BoerType(
         try {
             return Color.fromRGB(Integer.parseInt(hex, HEX_RADIX));
         } catch (IllegalArgumentException exception) {
-            Logger.warn(context + ".border.glow-color: '" + raw + "' не цвет");
+            Logger.warn(context + ".border.glow-color: '" + raw + "' не цвет, подсветка без цвета");
             return null;
         }
     }

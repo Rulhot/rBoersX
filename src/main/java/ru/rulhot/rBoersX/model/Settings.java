@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 public record Settings(
-        boolean debug,
         boolean metrics,
         boolean updateCheck,
         @NotNull Command command,
@@ -70,17 +69,16 @@ public record Settings(
                                          @NotNull ConfigurationSection fuel,
                                          @NotNull ConfigurationSection catalogue,
                                          @NotNull ConfigurationSection holograms) {
-        ConfigurationSection general = section(config, "settings");
-        ConfigurationSection performance = section(config, "performance");
-        ConfigurationSection command = section(config, "command");
-        ConfigurationSection limits = section(config, "limits");
-        ConfigurationSection worlds = section(config, "worlds");
-        ConfigurationSection border = section(items, "border");
+        ConfigurationSection general = section(config, "settings", CONFIG);
+        ConfigurationSection performance = section(config, "performance", CONFIG);
+        ConfigurationSection command = section(config, "command", CONFIG);
+        ConfigurationSection limits = section(config, "limits", CONFIG);
+        ConfigurationSection worlds = section(config, "worlds", CONFIG);
+        ConfigurationSection border = section(items, "border", ITEMS);
         Map<String, BoerType> types = boers(items);
         Set<Material> blocks = EnumSet.noneOf(Material.class);
         types.values().forEach(type -> blocks.add(type.block()));
         return new Settings(
-                general.getBoolean("debug", false),
                 general.getBoolean("metrics", true),
                 general.getBoolean("update-check", true),
                 new Command(command.getString("main", "rboersx"), List.copyOf(command.getStringList("aliases"))),
@@ -102,20 +100,21 @@ public record Settings(
                         decimal(performance, "border-view-radius", 48.0D, CONFIG + " performance"),
                         performance.getInt("border-update-ticks", 20)),
                 hologram(holograms, performance),
-                sound(section(config, "sounds.click"), CONFIG + " sounds.click"),
-                breakSound(section(config, "sounds.break"), CONFIG + " sounds.break"),
+                sound(section(config, "sounds.click", CONFIG), CONFIG + " sounds.click"),
+                breakSound(section(config, "sounds.break", CONFIG), CONFIG + " sounds.break"),
                 performance.getInt("autosave-seconds", 60),
                 performance.getInt("menu-refresh-ticks", 20),
                 Collections.unmodifiableMap(types),
                 Collections.unmodifiableSet(blocks));
     }
 
-    public static @NotNull ConfigurationSection section(@NotNull ConfigurationSection root, @NotNull String path) {
+    public static @NotNull ConfigurationSection section(@NotNull ConfigurationSection root, @NotNull String path,
+                                                        @NotNull String file) {
         ConfigurationSection section = root.getConfigurationSection(path);
         if (section != null) {
             return section;
         }
-        Logger.warn("Нет секции " + path);
+        Logger.warn(file + ": нет секции " + path + ", беру значения по умолчанию");
         return new MemoryConfiguration();
     }
 
@@ -125,11 +124,11 @@ public record Settings(
             try {
                 return Enum.valueOf(type, raw.trim().toUpperCase(Locale.ROOT).replace('-', '_'));
             } catch (IllegalArgumentException exception) {
-                Logger.warn(context + ": '" + raw + "' не подходит, взято " + fallback);
+                Logger.warn(context + ": неверное значение '" + raw + "', беру " + fallback);
                 return fallback;
             }
         }
-        Logger.warn(context + ": пусто, взято " + fallback);
+        Logger.warn(context + ": пусто, беру " + fallback);
         return fallback;
     }
 
@@ -145,7 +144,7 @@ public record Settings(
         try {
             return Double.parseDouble(String.valueOf(value).trim().replace(',', '.'));
         } catch (NumberFormatException exception) {
-            Logger.warn(context + "." + path + ": '" + value + "' не число, взято " + fallback);
+            Logger.warn(context + "." + path + ": '" + value + "' не число, беру " + fallback);
             return fallback;
         }
     }
@@ -153,7 +152,7 @@ public record Settings(
     public static @Nullable Material material(@Nullable String raw, @NotNull String context) {
         Material material = raw == null ? null : Material.matchMaterial(raw.trim());
         if (material == null) {
-            Logger.warn(context + ": нет материала " + raw);
+            Logger.warn(context + ": неизвестный материал '" + raw + "'");
         }
         return material;
     }
@@ -161,7 +160,7 @@ public record Settings(
     private static @NotNull Hologram hologram(@NotNull ConfigurationSection section,
                                               @NotNull ConfigurationSection performance) {
         String context = HOLOGRAMS;
-        ConfigurationSection style = section(section, "style");
+        ConfigurationSection style = section(section, "style", HOLOGRAMS);
         return new Hologram(
                 section.getBoolean("enabled", true),
                 decimal(section, "height", 0.6D, context),
@@ -202,10 +201,10 @@ public record Settings(
                 return Color.fromARGB((int) parsed);
             }
         } catch (NumberFormatException exception) {
-            Logger.warn(context + ": неверный фон '" + raw + "', взят default");
+            Logger.warn(context + ": неверный фон '" + raw + "', беру default");
             return null;
         }
-        Logger.warn(context + ": неверный фон '" + raw + "', взят default");
+        Logger.warn(context + ": неверный фон '" + raw + "', беру default");
         return null;
     }
 
@@ -222,7 +221,7 @@ public record Settings(
         }
         NamespacedKey key = NamespacedKey.fromString(raw.trim().toLowerCase(Locale.ROOT));
         if (key == null || Registry.SOUND_EVENT.get(key) == null) {
-            Logger.warn(context + ": нет звука " + raw);
+            Logger.warn(context + ": неизвестный звук '" + raw + "', звук выключен");
             return null;
         }
         return Sound.sound(key, Sound.Source.MASTER,
@@ -274,13 +273,13 @@ public record Settings(
                     continue;
                 }
                 if (seconds <= 0L || !material.isItem()) {
-                    Logger.warn(context + ": неверное топливо");
+                    Logger.warn(context + ": время должно быть больше 0 и предмет должен быть предметом, пропускаю");
                     continue;
                 }
                 items.put(material, seconds * MILLIS_PER_SECOND);
             }
         }
-        ConfigurationSection money = section(root, "money");
+        ConfigurationSection money = section(root, "money", FUEL);
         return new Fuel(Collections.unmodifiableMap(items), new Money(
                 money.getBoolean("enabled", true),
                 enumOr(Provider.class, money.getString("provider"), Provider.VAULT, FUEL + " money.provider"),

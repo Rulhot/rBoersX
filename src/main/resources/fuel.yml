@@ -1,4 +1,4 @@
-# Предмет: сколько секунд работы даёт одна штука
+# предмет: сколько секунд работы даёт одна штука
 items:
   COAL: 60
   CHARCOAL: 60
@@ -6,13 +6,10 @@ items:
   DRIED_KELP_BLOCK: 150
   BLAZE_ROD: 120
 
-# provider: VAULT, BVAULT, COINSENGINE, PLAYERPOINTS
-# currency: для COINSENGINE - ID валюты, для BVAULT - название счёта (обычный счёт называется vault).
-# Для VAULT и PLAYERPOINTS currency не используется
 money:
   enabled: true
-  provider: VAULT
-  currency: money
-  price-per-minute: 50 # сколько минут покупает кнопка, задано в menus/fuel.yml
+  provider: VAULT # VAULT, BVAULT, COINSENGINE, PLAYERPOINTS
+  currency: money # COINSENGINE: id валюты, BVAULT: имя счёта (обычный счёт vault)
+  price-per-minute: 50 # цена минуты, минуты на кнопках задаются в menus/fuel.yml
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

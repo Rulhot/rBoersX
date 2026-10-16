@@ -8,14 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.rulhot.rBoersX.command.BoerCommand;
-import ru.rulhot.rBoersX.command.sub.AdminsSubCommand;
-import ru.rulhot.rBoersX.command.sub.FuelSubCommand;
+import ru.rulhot.rBoersX.command.sub.AdminSubCommand;
 import ru.rulhot.rBoersX.command.sub.GiveSubCommand;
 import ru.rulhot.rBoersX.command.sub.HelpSubCommand;
-import ru.rulhot.rBoersX.command.sub.ListSubCommand;
 import ru.rulhot.rBoersX.command.sub.ReloadSubCommand;
-import ru.rulhot.rBoersX.command.sub.RemoveSubCommand;
-import ru.rulhot.rBoersX.command.sub.StopSubCommand;
 import ru.rulhot.rBoersX.database.DatabaseManager;
 import ru.rulhot.rBoersX.database.repository.BoerRepository;
 import ru.rulhot.rBoersX.hook.DecentHologramHook;
@@ -75,7 +71,7 @@ public final class RBoersX extends JavaPlugin {
             new UpdateChecker(getPluginMeta().getVersion()).check();
         }
 
-        FuelService fuelService = new FuelService(getServer(), configManager);
+        FuelService fuelService = new FuelService(getServer(), scheduler, configManager);
         fuelService.reload();
 
         BoerRepository repository = new BoerRepository(new DatabaseManager(getDataFolder()));
@@ -111,12 +107,8 @@ public final class RBoersX extends JavaPlugin {
         BoerCommand command = new BoerCommand(configManager, List.of(
                 new HelpSubCommand(configManager),
                 new GiveSubCommand(configManager, itemService, scheduler),
-                new AdminsSubCommand(configManager, List.of(
-                        new ListSubCommand(configManager, boerManager),
-                        new RemoveSubCommand(configManager, boerManager, menuManager, borderManager, hologramManager,
-                                itemService, scheduler),
-                        new FuelSubCommand(configManager, boerManager),
-                        new StopSubCommand(configManager, boerManager))),
+                new AdminSubCommand(configManager, boerManager, menuManager, borderManager, hologramManager,
+                        itemService, scheduler),
                 new ReloadSubCommand(configManager,
                         new ReloadService(scheduler, configManager, boerManager, fuelService, menuManager,
                                 borderManager, hologramManager))));
@@ -140,7 +132,7 @@ public final class RBoersX extends JavaPlugin {
                     ? new DecentHologramHook()
                     : null;
         } catch (Throwable throwable) {
-            Logger.error("Голограммы не подключились", throwable);
+            Logger.error("Не удалось подключить голограммы, работаю без них", throwable);
             return null;
         }
     }
@@ -152,7 +144,7 @@ public final class RBoersX extends JavaPlugin {
         try {
             return new WorldGuardHook();
         } catch (Throwable throwable) {
-            Logger.error("WorldGuard не подключился", throwable);
+            Logger.error("Не удалось подключить WorldGuard, приваты не проверяются", throwable);
             return ProtectionHook.NONE;
         }
     }

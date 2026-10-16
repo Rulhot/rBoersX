@@ -2,10 +2,8 @@ package ru.rulhot.rBoersX.manager;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,7 +39,6 @@ public final class ConfigManager {
     private static final Set<String> BLOCKS_LIVE_PATHS = Set.of("smelt");
     private static final Set<String> MENU_LIVE_PATHS = Set.of("buttons");
     private static final String PREFIX_KEY = "prefix";
-    private static final NamedTextColor CONSOLE_PREFIX_COLOR = NamedTextColor.GOLD;
     private static final Pattern HEX_TAG = Pattern.compile("</?#[0-9a-fA-F]{6}>");
     private static final String LONG_DASH = String.valueOf((char) 0x2014);
     private static final Map<String, String> CONSOLE_SYMBOLS = Map.of("»", ">", LONG_DASH, "-", " ⛃", "", "▌", "|");
@@ -83,7 +80,6 @@ public final class ConfigManager {
         }
         Settings settings = Settings.from(bundle.config(), bundle.items(), bundle.fuel(), bundle.blocks(),
                 bundle.holograms());
-        Logger.setDebugEnabled(settings.debug());
         snapshot = new Snapshot(settings, DatabaseSettings.from(bundle.database()), Map.copyOf(messages), Map.of(
                 MenuHolder.View.MAIN, MenuConfig.parse(MAIN_MENU, bundle.mainMenu()),
                 MenuHolder.View.FUEL, MenuConfig.parse(FUEL_MENU, bundle.fuelMenu()),
@@ -144,10 +140,8 @@ public final class ConfigManager {
             audience.sendMessage(message(key, placeholders));
             return;
         }
-        String prefix = PlainTextComponentSerializer.plainText().serialize(
-                MessageUtil.parseText(snapshot().messages().getOrDefault(PREFIX_KEY, "")));
         audience.sendMessage(parse(consoleSafe(raw), Placeholder.component(PREFIX_KEY,
-                Component.text(consoleSafe(prefix), CONSOLE_PREFIX_COLOR)), placeholders));
+                Component.text("[" + plugin.getName() + "]")), placeholders));
     }
 
     private @NotNull Component parse(@NotNull String raw, @NotNull TagResolver prefix,

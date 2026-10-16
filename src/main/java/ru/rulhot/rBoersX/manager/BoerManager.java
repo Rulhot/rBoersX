@@ -132,7 +132,7 @@ public final class BoerManager {
         index(boer);
         boer.takeDirty();
         repository.insert(boer, boer.toRecord());
-        return new PlaceResult.Placed(boer);
+        return new PlaceResult.Placed();
     }
 
     public void remove(@NotNull Boer boer) {
@@ -369,7 +369,7 @@ public final class BoerManager {
         BoerType type = type(boer);
         release(boer);
         if (type == null) {
-            Logger.warn("Бур " + boer.pos() + ": нет типа " + boer.typeId() + " в items.yml");
+            Logger.warn("Бур на " + boer.pos() + ": типа '" + boer.typeId() + "' нет в items.yml, бур не работает");
         } else if (boer.isRunning()) {
             hold(boer, List.of(boer.pos().chunkKey()));
         }
@@ -462,7 +462,7 @@ public final class BoerManager {
 
     public sealed interface PlaceResult {
 
-        record Placed(@NotNull Boer boer) implements PlaceResult {
+        record Placed() implements PlaceResult {
         }
 
         record NotLoaded() implements PlaceResult {

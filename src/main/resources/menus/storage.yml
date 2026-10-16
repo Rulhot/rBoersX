@@ -30,4 +30,4 @@ buttons:
     actions:
       - "[next]"
 
-config-version: 1 #не трогать!!!
+config-version: 2 #не трогать!!!

@@ -35,7 +35,7 @@ public class EconomyRegistry {
                 case PLAYERPOINTS -> new PlayerPointsEconomyProvider(PlayerPoints.getInstance().getAPI());
             };
         } catch (Throwable throwable) {
-            Logger.error("Экономика " + pluginName + " не подключилась", throwable);
+            Logger.error("Не удалось подключить экономику " + pluginName, throwable);
             return null;
         }
     }
@@ -51,7 +51,7 @@ public class EconomyRegistry {
             return null;
         }
         if (bank.length() > BVAULT_MAX_BANK_LENGTH) {
-            Logger.error("fuel.yml: money.currency длиннее " + BVAULT_MAX_BANK_LENGTH + " символов");
+            Logger.warn("fuel.yml: money.currency длиннее " + BVAULT_MAX_BANK_LENGTH + " символов");
             return null;
         }
         return new BVaultEconomyProvider(registration.getProvider(), bank);
@@ -65,7 +65,7 @@ public class EconomyRegistry {
         }
         ExcellentEconomyAPI api = registration.getProvider();
         if (!api.hasCurrency(currency)) {
-            Logger.error("CoinsEngine: нет валюты " + currency);
+            Logger.warn("fuel.yml: в CoinsEngine нет валюты '" + currency + "'");
             return null;
         }
         return new CoinsEngineEconomyProvider(api, currency);

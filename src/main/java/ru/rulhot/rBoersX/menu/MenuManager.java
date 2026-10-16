@@ -67,8 +67,8 @@ public final class MenuManager {
         for (ItemStack overflow : items.subList(Math.min(items.size(), slots.size()), items.size())) {
             Long millis = fuel.isFuel(overflow) ? burnTimes.get(overflow.getType()) : null;
             if (millis == null) {
-                Logger.warn("Бур " + boer.pos() + ": удалён " + overflow.getType() + " x" + overflow.getAmount()
-                        + ", не влез в меню топлива");
+                Logger.warn("Бур на " + boer.pos() + ": " + overflow.getType() + " x" + overflow.getAmount()
+                        + " не влез в меню топлива и не горит, удаляю");
                 continue;
             }
             boer.addFuel(millis * overflow.getAmount());
@@ -387,8 +387,8 @@ public final class MenuManager {
                 : config.message("storage.unlimited"));
         values.put("other_state", state(menu, boer.mineOther()));
         values.put("zone", MessageUtil.parseItemText(boer.forwardZone()
-                ? menu.format("zone-forward", "перед буром")
-                : menu.format("zone-center", "вокруг бура")));
+                ? menu.format("zone-forward")
+                : menu.format("zone-center")));
         values.put("page", holder.getPage() + 1);
         values.put("pages", pages);
         return values;
@@ -396,13 +396,13 @@ public final class MenuManager {
 
     private @NotNull List<Component> fuelLines(@NotNull MenuConfig menu, @NotNull Settings.Fuel settings) {
         List<Component> lines = new ArrayList<>();
-        String format = menu.format("fuel-line", "<gray>▪ <white>{item}: {time}");
+        String format = menu.format("fuel-line");
         settings.items().forEach((material, millis) -> lines.add(MessageUtil.parseItemText(format,
                 MessageUtil.placeholders(Map.of(
                         "item", Component.translatable(material.translationKey()),
                         "time", config.duration(millis))))));
         if (lines.isEmpty()) {
-            lines.add(MessageUtil.parseItemText(menu.format("fuel-none", "<gray>-")));
+            lines.add(MessageUtil.parseItemText(menu.format("fuel-none")));
         }
         return List.copyOf(lines);
     }
@@ -430,8 +430,8 @@ public final class MenuManager {
 
     private static @NotNull Component state(@NotNull MenuConfig menu, boolean enabled) {
         return MessageUtil.parseItemText(enabled
-                ? menu.format("state-on", "<green>включено")
-                : menu.format("state-off", "<red>выключено"));
+                ? menu.format("state-on")
+                : menu.format("state-off"));
     }
 
     private void clickOwnInventory(@NotNull Player player, @NotNull MenuHolder holder,
@@ -617,20 +617,22 @@ public final class MenuManager {
         if (type == null) {
             return;
         }
-        switch (fuel.buy(player, boer, type, minutes)) {
-            case FuelService.Result.Bought bought -> config.send(player, "fuel.bought", Map.of(
-                    "time", config.duration(bought.millis()),
-                    "price", MessageUtil.number(bought.price()),
-                    "fuel", config.duration(fuel.total(boer))));
-            case FuelService.Result.Full full -> config.send(player, "fuel.bought-full");
-            case FuelService.Result.Unavailable unavailable -> config.send(player, "fuel.money-unavailable");
-            case FuelService.Result.NotEnoughMoney notEnough -> config.send(player, "fuel.not-enough-money",
-                    Map.of("price", MessageUtil.number(notEnough.price())));
-            case FuelService.Result.EconomyFailed failed -> config.send(player, "fuel.economy-error");
-        }
-        if (boers.resume(boer)) {
-            config.send(player, "boer.resumed");
-        }
-        refresh(holder);
+        fuel.buy(player, boer, type, minutes, result -> {
+            switch (result) {
+                case FuelService.Result.Bought bought -> config.send(player, "fuel.bought", Map.of(
+                        "time", config.duration(bought.millis()),
+                        "price", MessageUtil.number(bought.price()),
+                        "fuel", config.duration(fuel.total(boer))));
+                case FuelService.Result.Full full -> config.send(player, "fuel.bought-full");
+                case FuelService.Result.Unavailable unavailable -> config.send(player, "fuel.money-unavailable");
+                case FuelService.Result.NotEnoughMoney notEnough -> config.send(player, "fuel.not-enough-money",
+                        Map.of("price", MessageUtil.number(notEnough.price())));
+                case FuelService.Result.EconomyFailed failed -> config.send(player, "fuel.economy-error");
+            }
+            if (boers.resume(boer)) {
+                config.send(player, "boer.resumed");
+            }
+            refresh(holder);
+        });
     }
 }
