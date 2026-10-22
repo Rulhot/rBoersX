@@ -14,8 +14,10 @@ import ru.rulhot.rBoersX.command.sub.HelpSubCommand;
 import ru.rulhot.rBoersX.command.sub.ReloadSubCommand;
 import ru.rulhot.rBoersX.database.DatabaseManager;
 import ru.rulhot.rBoersX.database.repository.BoerRepository;
+import ru.rulhot.rBoersX.hook.CakeRegionsHook;
 import ru.rulhot.rBoersX.hook.DecentHologramHook;
 import ru.rulhot.rBoersX.hook.FancyHologramHook;
+import ru.rulhot.rBoersX.hook.GriefPreventionHook;
 import ru.rulhot.rBoersX.hook.HologramHook;
 import ru.rulhot.rBoersX.hook.ProtectionHook;
 import ru.rulhot.rBoersX.hook.WorldGuardHook;
@@ -38,6 +40,7 @@ import ru.rulhot.rBoersX.util.SchedulerUtil;
 import ru.rulhot.rBoersX.util.UpdateChecker;
 import ru.rulhot.rBoersX.util.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class RBoersX extends JavaPlugin {
@@ -138,15 +141,34 @@ public final class RBoersX extends JavaPlugin {
     }
 
     private @NotNull ProtectionHook hookProtection() {
-        if (!getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-            return ProtectionHook.NONE;
+        List<ProtectionHook> hooks = new ArrayList<>();
+        PluginManager plugins = getServer().getPluginManager();
+        if (plugins.isPluginEnabled("WorldGuard")) {
+            try {
+                hooks.add(new WorldGuardHook());
+            } catch (Throwable throwable) {
+                Logger.error("Не удалось подключить WorldGuard, его регионы не проверяются", throwable);
+            }
         }
-        try {
-            return new WorldGuardHook();
-        } catch (Throwable throwable) {
-            Logger.error("Не удалось подключить WorldGuard, приваты не проверяются", throwable);
-            return ProtectionHook.NONE;
+        if (plugins.isPluginEnabled("GriefPrevention")) {
+            try {
+                hooks.add(new GriefPreventionHook());
+            } catch (Throwable throwable) {
+                Logger.error("Не удалось подключить GriefPrevention, его приваты не проверяются", throwable);
+            }
         }
+        if (plugins.isPluginEnabled("CakeRegionsPlus")) {
+            try {
+                hooks.add(new CakeRegionsHook());
+            } catch (Throwable throwable) {
+                Logger.error("Не удалось подключить CakeRegionsPlus, его регионы не проверяются", throwable);
+            }
+        }
+        return switch (hooks.size()) {
+            case 0 -> ProtectionHook.NONE;
+            case 1 -> hooks.getFirst();
+            default -> (owner, world, x, y, z) -> hooks.stream().allMatch(hook -> hook.canBreak(owner, world, x, y, z));
+        };
     }
 
     @Override

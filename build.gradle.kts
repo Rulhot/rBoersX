@@ -30,6 +30,8 @@ repositories {
         content {
             includeGroup("com.github.MilkBowl")
             includeGroup("com.github.decentsoftware-eu")
+            includeGroup("com.github.GriefPrevention")
+            includeGroup("com.github.CakesStudio")
         }
     }
 }
@@ -50,6 +52,8 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-core:7.0.9") { isTransitive = false }
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0") { isTransitive = false }
     compileOnly("com.sk89q.worldedit:worldedit-core:7.3.0") { isTransitive = false }
+    compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.4") { isTransitive = false }
+    compileOnly("com.github.CakesStudio:CakeRegionsAPI:v2.0.3") { isTransitive = false }
 }
 
 java {
